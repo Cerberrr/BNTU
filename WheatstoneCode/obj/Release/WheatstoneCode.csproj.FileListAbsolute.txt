@@ -1,0 +1,9 @@
+E:\5-ый курс. Лето\Сети\Project\Playfair_code\WheatstoneCode\bin\Release\WheatstoneCode.exe.config
+E:\5-ый курс. Лето\Сети\Project\Playfair_code\WheatstoneCode\bin\Release\WheatstoneCode.exe
+E:\5-ый курс. Лето\Сети\Project\Playfair_code\WheatstoneCode\bin\Release\WheatstoneCode.pdb
+E:\5-ый курс. Лето\Сети\Project\Playfair_code\WheatstoneCode\obj\Release\WheatstoneCode.csprojResolveAssemblyReference.cache
+E:\5-ый курс. Лето\Сети\Project\Playfair_code\WheatstoneCode\obj\Release\WheatstoneCode.frmMain.resources
+E:\5-ый курс. Лето\Сети\Project\Playfair_code\WheatstoneCode\obj\Release\WheatstoneCode.Properties.Resources.resources
+E:\5-ый курс. Лето\Сети\Project\Playfair_code\WheatstoneCode\obj\Release\WheatstoneCode.csproj.GenerateResource.Cache
+E:\5-ый курс. Лето\Сети\Project\Playfair_code\WheatstoneCode\obj\Release\WheatstoneCode.exe
+E:\5-ый курс. Лето\Сети\Project\Playfair_code\WheatstoneCode\obj\Release\WheatstoneCode.pdb

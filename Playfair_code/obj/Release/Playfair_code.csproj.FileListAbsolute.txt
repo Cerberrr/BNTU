@@ -1,0 +1,8 @@
+e:\5-ый курс. Лето\Сети\Project\Playfair_code\Playfair_code\bin\Release\Playfair_code.exe
+e:\5-ый курс. Лето\Сети\Project\Playfair_code\Playfair_code\bin\Release\Playfair_code.pdb
+e:\5-ый курс. Лето\Сети\Project\Playfair_code\Playfair_code\obj\Release\Playfair_code.csprojResolveAssemblyReference.cache
+e:\5-ый курс. Лето\Сети\Project\Playfair_code\Playfair_code\obj\Release\Playfair_code.Form1.resources
+e:\5-ый курс. Лето\Сети\Project\Playfair_code\Playfair_code\obj\Release\Playfair_code.Properties.Resources.resources
+e:\5-ый курс. Лето\Сети\Project\Playfair_code\Playfair_code\obj\Release\Playfair_code.csproj.GenerateResource.Cache
+e:\5-ый курс. Лето\Сети\Project\Playfair_code\Playfair_code\obj\Release\Playfair_code.exe
+e:\5-ый курс. Лето\Сети\Project\Playfair_code\Playfair_code\obj\Release\Playfair_code.pdb
