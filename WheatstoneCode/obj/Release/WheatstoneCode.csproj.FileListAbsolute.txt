@@ -7,3 +7,6 @@ E:\5-ый курс. Лето\Сети\Project\Playfair_code\WheatstoneCode\obj\R
 E:\5-ый курс. Лето\Сети\Project\Playfair_code\WheatstoneCode\obj\Release\WheatstoneCode.csproj.GenerateResource.Cache
 E:\5-ый курс. Лето\Сети\Project\Playfair_code\WheatstoneCode\obj\Release\WheatstoneCode.exe
 E:\5-ый курс. Лето\Сети\Project\Playfair_code\WheatstoneCode\obj\Release\WheatstoneCode.pdb
+C:\Works\BNTU\WheatstoneCode\bin\Release\WheatstoneCode.exe.config
+C:\Works\BNTU\WheatstoneCode\obj\Release\WheatstoneCode.exe
+C:\Works\BNTU\WheatstoneCode\obj\Release\WheatstoneCode.pdb
