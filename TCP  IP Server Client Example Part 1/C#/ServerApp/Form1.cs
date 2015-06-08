@@ -83,7 +83,7 @@ namespace ServerApp
                 }
 
                 //message has successfully been received
-                ASCIIEncoding encoder = new ASCIIEncoding();
+                UTF8Encoding encoder = new UTF8Encoding();
 
                 // Convert the Bytes received to a string and display it on the Server Screen
                 string msg = encoder.GetString(message, 0, bytesRead);
@@ -122,7 +122,7 @@ namespace ServerApp
         /// <param name="clientStream">
         /// The Client to communicate to
         /// </param>
-        private void Echo(string msg, ASCIIEncoding encoder, NetworkStream clientStream)
+        private void Echo(string msg, UTF8Encoding encoder, NetworkStream clientStream)
         {
             // Now Echo the message back
             byte[] buffer = encoder.GetBytes(msg);

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Playfair_code", "Playfair_c
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WheatstoneCode", "WheatstoneCode\WheatstoneCode.csproj", "{857F108B-093D-4278-9638-7AB32974A09D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerApp", "WheatstoneCode\ServerApp\ServerApp.csproj", "{944B77FC-13C9-4930-8369-1E4FEEB20770}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{857F108B-093D-4278-9638-7AB32974A09D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{857F108B-093D-4278-9638-7AB32974A09D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{857F108B-093D-4278-9638-7AB32974A09D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{944B77FC-13C9-4930-8369-1E4FEEB20770}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{944B77FC-13C9-4930-8369-1E4FEEB20770}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{944B77FC-13C9-4930-8369-1E4FEEB20770}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{944B77FC-13C9-4930-8369-1E4FEEB20770}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

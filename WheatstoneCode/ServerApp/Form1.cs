@@ -4,25 +4,28 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Net; 
+using System.Net;
 using System.Net.Sockets;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
 
-namespace WheatstoneCode
+namespace ServerApp
 {
-    public partial class frmMain : Form
+    public partial class Form1 : Form
     {
-        private string myMessage = "";
-        private TcpClient client = new TcpClient();
-        private IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 3000);
-        public frmMain()
+        private TcpListener tcpListener;
+        private Thread listenThread;
+        private int connectedClients = 0;
+        private delegate void WriteMessageDelegate(string msg);
+
+        public Form1()
         {
             InitializeComponent();
+            Server();
         }
         //матрица алфавита шифрования
-        public string[,] encriptionMatrixIn =
+        public string[,] encriptionMatrixOut =
                                          {
                                          {"А", "Ч", "Б", "М", "Ц", "В"}, //первая строка матрицы
                                          {"Ь", "Г", "Н", "Ш", "Д", "О"}, //вторая строка матрицы
@@ -31,7 +34,7 @@ namespace WheatstoneCode
                                          {"С", "-", "К", "Э", "Т", "Л"}, //пятая строка матрицы
                                          {"Ю", "Я", " ", "Ы", "Ф", "Ж"}  //шестая строка матрицы
                                          };
-        private string[,] encriptionMatrixOut = new string[6,6];
+        private string[,] encriptionMatrixIn = new string[6, 6];
 
         private string alfavit = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ .-,";
         private string keyText;
@@ -43,8 +46,113 @@ namespace WheatstoneCode
         private string encodetString; //зашифрованая строка
         private string decodetString; //расшифрованная строка
 
-	
-        #region Кодирование текста
+        private void Server()
+        {
+            this.tcpListener = new TcpListener(IPAddress.Loopback, 3000); // Change to IPAddress.Any for internet wide Communication
+            this.listenThread = new Thread(new ThreadStart(ListenForClients));
+            this.listenThread.Start();
+        }
+
+        private void ListenForClients()
+        {
+            this.tcpListener.Start();
+
+            while (true) // Never ends until the Server is closed.
+            {
+                //blocks until a client has connected to the server
+                TcpClient client = this.tcpListener.AcceptTcpClient();
+
+                //create a thread to handle communication 
+                //with connected client
+                connectedClients++; // Increment the number of clients that have communicated with us.
+                lblNumberOfConnections.Text = connectedClients.ToString();
+
+                Thread clientThread = new Thread(new ParameterizedThreadStart(HandleClientComm));
+                clientThread.Start(client);
+            }
+        }
+
+        private void HandleClientComm(object client)
+        {
+            TcpClient tcpClient = (TcpClient)client;
+            NetworkStream clientStream = tcpClient.GetStream();
+
+            byte[] message = new byte[4096];
+            int bytesRead;
+
+            while (true)
+            {
+                bytesRead = 0;
+
+                try
+                {
+                    //blocks until a client sends a message
+                    bytesRead = clientStream.Read(message, 0, 4096);
+                }
+                catch
+                {
+                    //a socket error has occured
+                    break;
+                }
+
+                if (bytesRead == 0)
+                {
+                    //the client has disconnected from the server
+                    connectedClients--;
+                    lblNumberOfConnections.Text = connectedClients.ToString();
+                    break;
+                }
+
+                //message has successfully been received
+                UTF8Encoding encoder = new UTF8Encoding();
+
+                // Convert the Bytes received to a string and display it on the Server Screen
+                string msg = encoder.GetString(message, 0, bytesRead);
+                WriteMessage(msg);
+
+                // Now Echo the message back
+
+                Echo(msg, encoder, clientStream);
+            }
+
+            tcpClient.Close();
+        }
+
+        private void WriteMessage(string msg)
+        {
+            if (this.rtbServer.InvokeRequired)
+            {
+                WriteMessageDelegate d = new WriteMessageDelegate(WriteMessage);
+                //this.rtbServer.Invoke(d, new object[] { msg });
+                richTextBox4.Text = msg;
+            }
+            else
+            {
+                this.rtbServer.AppendText(msg + Environment.NewLine);
+            }
+        }
+
+        /// <summary>
+        /// Echo the message back to the sending client
+        /// </summary>
+        /// <param name="msg">
+        /// String: The Message to send back
+        /// </param>
+        /// <param name="encoder">
+        /// Our UTF8Encoding
+        /// </param>
+        /// <param name="clientStream">
+        /// The Client to communicate to
+        /// </param>
+        private void Echo(string msg, UTF8Encoding encoder, NetworkStream clientStream)
+        {
+            // Now Echo the message back
+            byte[] buffer = encoder.GetBytes(msg);
+
+            clientStream.Write(buffer, 0, buffer.Length);
+            clientStream.Flush();
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             richTextBox3.Text = "";
@@ -55,9 +163,9 @@ namespace WheatstoneCode
             {
                 for (j = 0; j < 6; j++)
                 {
-                    if (keyText.Length > 0 )
+                    if (keyText.Length > 0)
                     {
-                        encriptionMatrixOut[i, j] = Convert.ToString(keyText[0]);
+                        encriptionMatrixIn[i, j] = Convert.ToString(keyText[0]);
                         alfavit = alfavit.Replace(Convert.ToString(keyText[0]), "");
                         keyText = keyText.Replace(Convert.ToString(keyText[0]), "");
                     }
@@ -65,7 +173,7 @@ namespace WheatstoneCode
                     {
                         if (alfavit.Length > 0)
                         {
-                            encriptionMatrixOut[i, j] = Convert.ToString(alfavit[0]);
+                            encriptionMatrixIn[i, j] = Convert.ToString(alfavit[0]);
                             alfavit = alfavit.Replace(Convert.ToString(alfavit[0]), "");
                         }
                     }
@@ -147,54 +255,5 @@ namespace WheatstoneCode
                 richTextBox3.Text = encodetString.ToLower();
             }
         }
-
-        #endregion
-   
-        private void SendMessage(string msg)
-        {
-            NetworkStream clientStream = client.GetStream();
-            UTF8Encoding encoder = new UTF8Encoding();
-            
-            byte[] buffer = Encoding.UTF8.GetBytes(msg);
-            
-            clientStream.Write(buffer, 0, buffer.Length);
-            clientStream.Flush();
-
-            // Receive the TcpServer.response.
-
-            // Buffer to store the response bytes.
-            Byte[] data = new Byte[256];
-
-            // String to store the response ASCII representation.
-            String responseData = String.Empty;
-
-            // Read the first batch of the TcpServer response bytes.
-            Int32 bytes = clientStream.Read(data, 0, data.Length);
-            responseData = System.Text.Encoding.UTF8.GetString(data, 0, bytes);
-            
-            statusStrip1.Text = "Ответ сервера: " + responseData;
-            //rtbClient.AppendText(Environment.NewLine + "From Server: " + responseData);
-        }
-        private void button2_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                client.Connect(serverEndPoint);
-                byte[] msg = Encoding.UTF8.GetBytes(richTextBox3.Text);
-                
-                SendMessage(richTextBox3.Text);
-                myMessage = "";
-                client.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Ошибка..", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-            }
-            finally
-            {
-                Console.ReadLine();
-            }
-        }
-    } 
+    }
 }
-
