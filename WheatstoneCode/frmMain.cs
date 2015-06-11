@@ -14,12 +14,24 @@ namespace WheatstoneCode
 {
     public partial class frmMain : Form
     {
-        private string myMessage = "";
         private TcpClient client = new TcpClient();
         private IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 3000);
         public frmMain()
         {
             InitializeComponent();
+            try
+            {
+                client.Connect(serverEndPoint);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Сервер не найден !!!", "Ошибка..", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+            finally
+            {
+                Application.Exit();
+            }
+            
         }
         //матрица алфавита шифрования
         public string[,] encriptionMatrixIn =
@@ -47,6 +59,7 @@ namespace WheatstoneCode
         #region Кодирование текста
         private void button1_Click(object sender, EventArgs e)
         {
+            alfavit = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ .-,";
             richTextBox3.Text = "";
             keyText = Convert.ToString(textBox1.Text).ToUpper();
             int i, j;
@@ -76,6 +89,11 @@ namespace WheatstoneCode
             encodetString = "";
             text = Convert.ToString(richTextBox4.Text).ToUpper();
             int t = text.Length; //длина входной строки
+            if (t == 0)
+            {
+                MessageBox.Show("Не введен текст для шифрования.", "Ошибка..", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                return;
+            }
             // проверяем, четное ли число символов в строке
             int temp = t % 2;
             if (temp != 0) //если нет
@@ -171,28 +189,17 @@ namespace WheatstoneCode
             // Read the first batch of the TcpServer response bytes.
             Int32 bytes = clientStream.Read(data, 0, data.Length);
             responseData = System.Text.Encoding.UTF8.GetString(data, 0, bytes);
-            
-            statusStrip1.Text = "Ответ сервера: " + responseData;
-            //rtbClient.AppendText(Environment.NewLine + "From Server: " + responseData);
+            label3.Text = "Ответ сервера: " + responseData;
         }
         private void button2_Click(object sender, EventArgs e)
         {
             try
             {
-                client.Connect(serverEndPoint);
-                byte[] msg = Encoding.UTF8.GetBytes(richTextBox3.Text);
-                
                 SendMessage(richTextBox3.Text);
-                myMessage = "";
-                client.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "Ошибка..", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-            }
-            finally
-            {
-                Console.ReadLine();
             }
         }
     } 

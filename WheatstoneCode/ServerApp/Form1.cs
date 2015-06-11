@@ -112,10 +112,10 @@ namespace ServerApp
 
                 // Now Echo the message back
 
-                Echo(msg, encoder, clientStream);
+                Echo("Сообщение успешно получено!", encoder, clientStream);
             }
 
-            tcpClient.Close();
+            //tcpClient.Close();
         }
 
         private void WriteMessage(string msg)
@@ -153,9 +153,9 @@ namespace ServerApp
             clientStream.Flush();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void CreateOutMas()
         {
-            richTextBox3.Text = "";
+            alfavit = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ .-,";
             keyText = Convert.ToString(textBox1.Text).ToUpper();
             int i, j;
             // Создание второго массива с помощью ключа.
@@ -179,9 +179,14 @@ namespace ServerApp
                     }
                 }
             }
+        }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            CreateOutMas();
             text = "";
             encodetString = "";
+            int i, j;
             text = Convert.ToString(richTextBox4.Text).ToUpper();
             int t = text.Length; //длина входной строки
             // проверяем, четное ли число символов в строке
@@ -192,9 +197,9 @@ namespace ServerApp
             }
 
             int len = text.Length / 2; /*длина нового массива -
-                                                равная половине длины входного слова
-                                                 т.к. в новом масиве каждый элемент будет
-                                                   содержать 2 элемента из старого массива*/
+                                       равная половине длины входного слова
+                                       т.к. в новом масиве каждый элемент будет
+                                       содержать 2 элемента из старого массива*/
 
             string[] str = new string[len]; //новый массив
             int l = -1; //служебная переменная
@@ -207,10 +212,8 @@ namespace ServerApp
                     //Элемент_нового_массива[i] =  Элемент_старого_массива[i] +  Элемент_старого_массива[i+1]
                     str[l] = Convert.ToString(text[i]) + Convert.ToString(text[i + 1]);
                 }
-
             }
             // координаты очередного найденного символа из каждой пары
-
             foreach (string both in str)
             {
                 for (i = 0; i < 6; i++)
@@ -222,7 +225,6 @@ namespace ServerApp
                         {
                             i_first = i;
                             j_first = j;
-
                         }
 
                         //координаты второго символа пары в исходной матрице 2
@@ -230,30 +232,42 @@ namespace ServerApp
                         {
                             i_second = i;
                             j_second = j;
-
                         }
                     }
                 }
-
                 // если пара символов находится в одной строке
                 if (i_first == i_second)
                 {
                     s1 = Convert.ToString(encriptionMatrixOut[i_first, j_first]);
                     s2 = Convert.ToString(encriptionMatrixIn[i_second, j_second]);
                 }
-
                 ///если пара символов находиться в разных столбцах и строках
                 if (i_first != i_second)
                 {
-
                     s1 = Convert.ToString(encriptionMatrixOut[i_first, j_second]);
                     s2 = Convert.ToString(encriptionMatrixIn[i_second, j_first]);
                 }
-
                 //записыавем результат кодирования
                 encodetString = encodetString + s1 + s2;
+                richTextBox3.Text = "";
                 richTextBox3.Text = encodetString.ToLower();
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            richTextBox3.Text = "";
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.tcpListener.Stop();
+            this.listenThread.Abort();
         }
     }
 }

@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Playfair_code", "Playfair_code\Playfair_code.csproj", "{CEB798F9-0C33-490E-AAFD-1F4F510D48A0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WheatstoneCode", "WheatstoneCode\WheatstoneCode.csproj", "{857F108B-093D-4278-9638-7AB32974A09D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerApp", "WheatstoneCode\ServerApp\ServerApp.csproj", "{944B77FC-13C9-4930-8369-1E4FEEB20770}"
@@ -15,10 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CEB798F9-0C33-490E-AAFD-1F4F510D48A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CEB798F9-0C33-490E-AAFD-1F4F510D48A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CEB798F9-0C33-490E-AAFD-1F4F510D48A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CEB798F9-0C33-490E-AAFD-1F4F510D48A0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{857F108B-093D-4278-9638-7AB32974A09D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{857F108B-093D-4278-9638-7AB32974A09D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{857F108B-093D-4278-9638-7AB32974A09D}.Release|Any CPU.ActiveCfg = Release|Any CPU
