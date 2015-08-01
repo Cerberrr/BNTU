@@ -25,7 +25,7 @@ namespace WheatstoneCode
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Сервер не найден !!!", "Ошибка..", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show("Сервер не найден !!! " + ex, "Ошибка..", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
             finally
             {
@@ -53,11 +53,8 @@ namespace WheatstoneCode
         private int i_second = 0, j_second = 0;//координаты второго символа пары
         private string s1 = "", s2 = ""; //строки для хранения зашифрованного символа 
         private string encodetString; //зашифрованая строка
-        private string decodetString; //расшифрованная строка
 
-	
-        #region Кодирование текста
-        private void button1_Click(object sender, EventArgs e)
+        private void CreateOutMas()
         {
             alfavit = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ .-,";
             richTextBox3.Text = "";
@@ -68,7 +65,7 @@ namespace WheatstoneCode
             {
                 for (j = 0; j < 6; j++)
                 {
-                    if (keyText.Length > 0 )
+                    if (keyText.Length > 0)
                     {
                         encriptionMatrixOut[i, j] = Convert.ToString(keyText[0]);
                         alfavit = alfavit.Replace(Convert.ToString(keyText[0]), "");
@@ -83,8 +80,13 @@ namespace WheatstoneCode
                         }
                     }
                 }
-            }
-
+            }            
+        }
+        #region Кодирование текста
+        private void button1_Click(object sender, EventArgs e)
+        {
+            CreateOutMas();
+            int i, j;
             text = "";
             encodetString = "";
             text = Convert.ToString(richTextBox4.Text).ToUpper();
@@ -120,8 +122,7 @@ namespace WheatstoneCode
 
             }
             // координаты очередного найденного символа из каждой пары
-
-            foreach (string both in str)
+            foreach (var both in str)
             {
                 for (i = 0; i < 6; i++)
                 {
@@ -132,7 +133,6 @@ namespace WheatstoneCode
                         {
                             i_first = i;
                             j_first = j;
-
                         }
 
                         //координаты второго символа пары в исходной матрице 2
@@ -140,59 +140,55 @@ namespace WheatstoneCode
                         {
                             i_second = i;
                             j_second = j;
-
                         }
                     }
                 }
-
                 // если пара символов находится в одной строке
                 if (i_first == i_second)
                 {
                     s1 = Convert.ToString(encriptionMatrixOut[i_first, j_first]);
                     s2 = Convert.ToString(encriptionMatrixIn[i_second, j_second]);
                 }
-
                 ///если пара символов находиться в разных столбцах и строках
                 if (i_first != i_second)
                 {
-
                     s1 = Convert.ToString(encriptionMatrixOut[i_first, j_second]);
                     s2 = Convert.ToString(encriptionMatrixIn[i_second, j_first]);
                 }
-
                 //записыавем результат кодирования
                 encodetString = encodetString + s1 + s2;
                 richTextBox3.Text = encodetString.ToLower();
             }
+            label3.Text = "Текст успешно зашифрован.";
         }
-
         #endregion
-   
         private void SendMessage(string msg)
         {
-            NetworkStream clientStream = client.GetStream();
-            UTF8Encoding encoder = new UTF8Encoding();
-            
-            byte[] buffer = Encoding.UTF8.GetBytes(msg);
-            
-            clientStream.Write(buffer, 0, buffer.Length);
-            clientStream.Flush();
+                NetworkStream clientStream = client.GetStream();
+                UTF8Encoding encoder = new UTF8Encoding();
 
-            // Receive the TcpServer.response.
+                byte[] buffer = Encoding.UTF8.GetBytes(msg);
 
-            // Buffer to store the response bytes.
-            Byte[] data = new Byte[256];
+                clientStream.Write(buffer, 0, buffer.Length);
+                clientStream.Flush();
 
-            // String to store the response ASCII representation.
-            String responseData = String.Empty;
+                // Ждем ответ от сервера.
+                // буфер для сохранения ответа сервера
+                Byte[] data = new Byte[256];
 
-            // Read the first batch of the TcpServer response bytes.
-            Int32 bytes = clientStream.Read(data, 0, data.Length);
-            responseData = System.Text.Encoding.UTF8.GetString(data, 0, bytes);
-            label3.Text = "Ответ сервера: " + responseData;
+                // Строковая переменная ответа сервера в кодировке UTF8 
+                String responseData = String.Empty;
+
+                // Read the first batch of the TcpServer response bytes.
+                Int32 bytes = clientStream.Read(data, 0, data.Length);
+                responseData = System.Text.Encoding.UTF8.GetString(data, 0, bytes);
+                label3.Text = "";
+                label3.Text = "Ответ сервера: " + responseData;
         }
         private void button2_Click(object sender, EventArgs e)
         {
+            if (richTextBox3.Text.Length != 0)
+            {
             try
             {
                 SendMessage(richTextBox3.Text);
@@ -200,6 +196,11 @@ namespace WheatstoneCode
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "Ошибка..", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+                        }
+            else
+            {
+                MessageBox.Show("Текст для отправки сервету отсутствует", "Ошибка..", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
     } 

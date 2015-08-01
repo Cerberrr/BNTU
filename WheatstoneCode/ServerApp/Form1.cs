@@ -44,8 +44,7 @@ namespace ServerApp
         private int i_second = 0, j_second = 0;//координаты второго символа пары
         private string s1 = "", s2 = ""; //строки для хранения зашифрованного символа 
         private string encodetString; //зашифрованая строка
-        private string decodetString; //расшифрованная строка
-
+        
         private void Server()
         {
             this.tcpListener = new TcpListener(IPAddress.Loopback, 3000); // Change to IPAddress.Any for internet wide Communication
@@ -83,7 +82,6 @@ namespace ServerApp
             while (true)
             {
                 bytesRead = 0;
-
                 try
                 {
                     //blocks until a client sends a message
@@ -94,7 +92,6 @@ namespace ServerApp
                     //a socket error has occured
                     break;
                 }
-
                 if (bytesRead == 0)
                 {
                     //the client has disconnected from the server
@@ -102,48 +99,29 @@ namespace ServerApp
                     lblNumberOfConnections.Text = connectedClients.ToString();
                     break;
                 }
-
                 //message has successfully been received
                 UTF8Encoding encoder = new UTF8Encoding();
 
                 // Convert the Bytes received to a string and display it on the Server Screen
                 string msg = encoder.GetString(message, 0, bytesRead);
-                WriteMessage(msg);
-
-                // Now Echo the message back
-
-                Echo("Сообщение успешно получено!", encoder, clientStream);
+                WriteMessage(msg, encoder, clientStream);
             }
-
-            //tcpClient.Close();
         }
 
-        private void WriteMessage(string msg)
+        private void WriteMessage(string msg, UTF8Encoding encoder, NetworkStream clientStream)
         {
-            if (this.rtbServer.InvokeRequired)
+            if (msg.Length > 0)
             {
-                WriteMessageDelegate d = new WriteMessageDelegate(WriteMessage);
-                //this.rtbServer.Invoke(d, new object[] { msg });
                 richTextBox4.Text = msg;
+                // Now Echo the message back
+                Echo("Сообщение успешно получено!", encoder, clientStream);
             }
             else
             {
-                this.rtbServer.AppendText(msg + Environment.NewLine);
+                Echo("Произошла ошибка. Сообщение утеряно.", encoder, clientStream);
             }
         }
 
-        /// <summary>
-        /// Echo the message back to the sending client
-        /// </summary>
-        /// <param name="msg">
-        /// String: The Message to send back
-        /// </param>
-        /// <param name="encoder">
-        /// Our UTF8Encoding
-        /// </param>
-        /// <param name="clientStream">
-        /// The Client to communicate to
-        /// </param>
         private void Echo(string msg, UTF8Encoding encoder, NetworkStream clientStream)
         {
             // Now Echo the message back
